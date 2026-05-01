@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Spam Detection AI</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #0f172a;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 65%;
+            margin: auto;
+            margin-top: 50px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #38bdf8;
+        }
+
+        .card {
+            background: #1e293b;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 12px;
+        }
+
+        input {
+            width: 75%;
+            padding: 10px;
+        }
+
+        button {
+            padding: 10px;
+            background: #38bdf8;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .spam {
+            color: #f87171;
+        }
+
+        .ham {
+            color: #4ade80;
+        }
+
+        .error {
+            color: yellow;
+        }
+
+        .small-text {
+            color: #cbd5e1;
+        }
+
+        .bar-bg {
+            background: #334155;
+            width: 100%;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+
+        .bar {
+            padding: 6px;
+            border-radius: 6px;
+            text-align: center;
+            color: black;
+            font-weight: bold;
+            width: 0;
+        }
+
+        .spam-bar {
+            background: #f87171;
+        }
+
+        .ham-bar {
+            background: #4ade80;
+        }
+
+        .warning {
+            color: #f87171;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Spam Detection System</h1>
+
+    <!-- INPUT -->
+    <div class="card">
+        <form method="POST" action="/predict">
+            <input type="text" name="message" placeholder="Try: Win a free prize now!">
+            <button type="submit">Check</button>
+        </form>
+
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+
+        {% if prediction %}
+            <h2 class="{% if 'Spam' in prediction %}spam{% else %}ham{% endif %}">
+                {{ prediction }}
+            </h2>
+
+            <p>Confidence: {{ confidence }}% — {{ confidence_text }}</p>
+
+            <!-- PROGRESS BAR (NO CSS ERRORS) -->
+            <div class="bar-bg">
+                <div class="bar {{ 'spam-bar' if 'Spam' in prediction else 'ham-bar' }}"
+                     data-width="{{ confidence | default(0) }}">
+                    {{ confidence }}%
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    {% if prediction %}
+
+    <!-- PROBABILITY -->
+    <div class="card">
+        <h3>📊 Probability Breakdown</h3>
+        <p>Spam probability: {{ spam_prob }}%</p>
+        <p>Not spam probability: {{ ham_prob }}%</p>
+    </div>
+
+    <!-- EXPLANATION -->
+    <div class="card">
+        <h3>🧠 Why this result?</h3>
+        <p class="small-text">
+            The model checks the words in the message and compares them with patterns learned from spam and non-spam examples.
+        </p>
+
+        <p><strong>Most frequent word:</strong> {{ top_word }}</p>
+        <p><strong>Message length:</strong> {{ word_count }} words</p>
+        <p><strong>Character count:</strong> {{ char_count }} characters</p>
+    </div>
+
+    <!-- CLEANED TEXT -->
+    <div class="card">
+        <h3>🧹 Processed Message</h3>
+        <p>{{ cleaned_text }}</p>
+    </div>
+
+    <!-- IMPORTANT WORDS -->
+    <div class="card">
+        <h3>🔍 Important Words in Message</h3>
+
+        {% if important_words %}
+            <ul>
+                {% for word, count in important_words %}
+                    <li>
+                        <strong>{{ word }}</strong> appears {{ count }} time(s)
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No important words found.</p>
+        {% endif %}
+    </div>
+
+    <!-- SUSPICIOUS WORDS -->
+    <div class="card">
+        <h3>⚠️ Suspicious Words</h3>
+
+        {% if suspicious_words %}
+            <ul>
+                {% for word, count in suspicious_words.items() %}
+                    <li class="warning">
+                        <strong>{{ word }}</strong> appears {{ count }} time(s)
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No common suspicious spam words detected.</p>
+        {% endif %}
+    </div>
+
+    {% endif %}
+
+    <!-- HISTORY -->
+    <div class="card">
+        <h3>🕓 Recent Predictions</h3>
+
+        {% if history %}
+            <ul>
+            {% for item in history %}
+                <li>
+                    <strong>Message:</strong> {{ item[0] }} <br>
+                    <strong>Result:</strong> {{ item[1] }} <br>
+                    <strong>Confidence:</strong> {{ item[2] }}% <br>
+                    <strong>Time:</strong> {{ item[3] }}
+                </li>
+                <br>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No predictions yet.</p>
+        {% endif %}
+    </div>
+
+</div>
+
+<!-- JS to apply width -->
+<script>
+    document.querySelectorAll('.bar').forEach(bar => {
+        const width = bar.getAttribute('data-width');
+        bar.style.width = width + '%';
+    });
+</script>
+
+</body>
+</html>
