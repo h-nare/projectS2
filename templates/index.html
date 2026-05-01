@@ -127,14 +127,14 @@
 
     <!-- PROBABILITY -->
     <div class="card">
-        <h3>📊 Probability Breakdown</h3>
+        <h3> Probability Breakdown</h3>
         <p>Spam probability: {{ spam_prob }}%</p>
         <p>Not spam probability: {{ ham_prob }}%</p>
     </div>
 
     <!-- EXPLANATION -->
     <div class="card">
-        <h3>🧠 Why this result?</h3>
+        <h3> Why this result?</h3>
         <p class="small-text">
             The model checks the words in the message and compares them with patterns learned from spam and non-spam examples.
         </p>
@@ -146,7 +146,7 @@
 
     <!-- CLEANED TEXT -->
     <div class="card">
-        <h3>🧹 Processed Message</h3>
+        <h3> Processed Message</h3>
         <p>{{ cleaned_text }}</p>
     </div>
 
@@ -169,7 +169,7 @@
 
     <!-- SUSPICIOUS WORDS -->
     <div class="card">
-        <h3>⚠️ Suspicious Words</h3>
+        <h3> Suspicious Words</h3>
 
         {% if suspicious_words %}
             <ul>
