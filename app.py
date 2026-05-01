@@ -38,7 +38,7 @@ def predict():
     prob = model.predict_proba(vector)[0]
     pred = model.predict(vector)[0]
 
-    label = "Spam ❌" if pred == 1 else "Not Spam ✅"
+    label = "Spam " if pred == 1 else "Not Spam "
 
     spam_prob = round(prob[1] * 100, 2)
     ham_prob = round(prob[0] * 100, 2)
