@@ -56,7 +56,7 @@ TF-IDF(t,d) = TF(t,d) * log(N / DF(t))
 
 Clone repository:
 
-git clone https://github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
+git clone https://github.com/h-nare/projectS2.git
 
 Install dependencies:
 
