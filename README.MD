@@ -56,7 +56,7 @@ TF-IDF(t,d) = TF(t,d) * log(N / DF(t))
 
 Clone repository:
 
-git clone https://github.com/h-nare/projectS2.git
+git clone https://github.com/h-nare/projectS2_spamDetection.git
 
 Install dependencies:
 
